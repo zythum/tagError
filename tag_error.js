@@ -139,7 +139,7 @@
 			'</div>'+
 			'<div style="'+ style.toolbreak.join(';')+';' +'">'+
 				'<span style="'+ style.toolspan.join(';')+';' +'">&#x5408;&#x6CD5;&#x5355;&#x6807;&#x7B7E;:</span>'+
-				'<textarea id="'+time+'single_tag" style="'+ style.toolarea.join(';')+';' +'">!, !DOCTYPE, !--, meta, link, base, img, br, hr, input</textarea>'+
+				'<textarea id="'+time+'single_tag" style="'+ style.toolarea.join(';')+';' +'">meta, link, base, img, br, hr, input</textarea>'+
 			'</div>'+
 			'<div style="'+ style.toolbreak.join(';')+';' +'">'+
 				'<div id="'+time+'check_btn" style="'+ style.toolbtn.join(';')+';' +'">&#x68C0;&#x67E5;&#x6807;&#x7B7E;</div>'+
@@ -180,10 +180,7 @@
 			//==================================
 			//单标签
 			,singleTag = [
-				 '!'
-				,'!DOCTYPE'
-				,'!--'
-				,'meta'
+				 'meta'
 				,'link'
 				,'base'
 				,'img'
