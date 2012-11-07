@@ -432,9 +432,10 @@
 				htmlLength = html.length
 				pieceNum = htmlLength/pieceLength + 1
 				html = html
-					.replace(/<script[^>]*?>(.|\n)*?<\/script>/gim,'<script>...</script>')
-					.replace(/<style[^>]*?>(.|\n)*?<\/style>/gim,'<style>...</style>')
-					.replace(/<textarea[^>]*?>(.|\n)*?<\/textarea>/gim,'<textarea>...</textarea>')
+					.replace(/<script[^>]*?>(.|\n|\r|\ )*?<\/script>/gim,'<script>...</script>')
+					.replace(/<style[^>]*?>(.|\n|\r|\ )*?<\/style>/gim,'<style>...</style>')
+					.replace(/<textarea[^>]*?>(.|\n|\r|\ )*?<\/textarea>/gim,'<textarea>...</textarea>')
+				
 				for(i=0;i<pieceNum;i=i+1){
 					execArr.push({
 						 func: function(piece){
