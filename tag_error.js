@@ -1,8 +1,88 @@
-(function(window,document){	
-	var output
-	var msg
+(function(window,document){
+	var  aWindow
+		,output
+		,msg
+		,indentPxDOM
+		,singleTagDOM
+	var time = [
+		 (new Date()).getTime().toString()
+		,Math.random().toString().replace('.','')
+		,''
+	].join('_')
 	var style = {
-		 line: [
+		tool: [
+			 'padding:10px'
+		 	,'margin:0'
+		 	,'color:#fff'
+			,'position:fixed'
+			,'right:0'
+			,'top:0'
+			,'width:300px'
+			,'background:#333'
+			,'font-family: arial, sans-serif'
+			,'box-shadow:0 0 3px #333'
+			,'text-align:left'
+			,'z-index:10000000'
+		]
+		,toolbreak: [
+			 'padding:10px 0 0 0'
+			,'margin:0'			
+			,'text-align:left'
+			,'line-height:14px'
+			,'color:#fff'
+			,'clear:both'
+		]
+		,toolspan: [
+		 	 'padding:0'
+		 	,'margin:0'
+		 	,'font-size:14px'
+		 	,'color:#fff'
+		 	,'line-height:16px'
+		 	,'display:block'
+		 	,'float:left'
+		 	,'width:80px'
+		]
+		,toolinput: [
+			 'padding:0'
+		 	,'margin:0 0 0 90px'
+		 	,'color:#fff'
+		 	,'line-height:16px'
+		 	,'font-size:14px'
+		 	,'width:30px'
+		 	,'background:#333'
+		 	,'border:none'
+		 	,'text-align:left'
+		 	,'display:block'
+		]
+		,toolarea: [
+			 'padding:5px'
+		 	,'margin:0 0 0 90px'
+		 	,'color:#333'
+		 	,'background:#eee'
+		 	,'font-size:14px'
+		 	,'text-align:left'
+		 	,'border:none'
+		 	,'height:100px'
+		 	,'display:block'
+		]
+		,toolbtn: [
+			 'padding:0'
+		 	,'margin:0 auto'
+		 	,'color:#fff'
+		 	,'font-size:16px'
+		 	,'width:200px'
+		 	,'text-align:center'
+		 	,'width:150px'
+		 	,'height:30px'
+		 	,'line-height:30px'
+		 	,'box-shadow:0 0 2px #000'
+		 	,'cursor:pointer'
+		 	,'background-image:-webkit-linear-gradient(top, #555 0%,#444 100%)'
+		 	,'background-image:-moz-linear-gradient(top, #555 0%,#444 100%)'
+		 	,'background-image:-o-linear-gradient(top, #555 0%,#444 100%)'
+		 	,'background-image:linear-gradient(top, #555 0%,#444 100%)'
+		]
+		,line: [
 		 	 'padding:0'
 		 	,'margin:0'
 		 	,'color:#fff'
@@ -14,24 +94,23 @@
 			,'height:16px'
 			,'line-height:16px'
 			,'font-size:14px'
-			,'text-overflow:ellipsis; white-space:nowrap;overflow:hidden'
+			,'text-overflow:ellipsis'
+			,'white-space:nowrap'
+			,'overflow:hidden'
 			,'border-left:3px solid #999'
 			,'letter-spacing:2px'
 		]
 		,error: [
 			'background:red'
 		]
-		,out: [
-			 'position:fixed'
-			,'top:0'
-			,'left:5%'
-			,'right:5%'
-			,'height:90%'
-			,'background:#333'
+		,body: [
+			'background:#444'
+		]
+		,out: [			
+			 'background:#333'
 			,'overflow:auto'
 			,'border:10px solid #333'
-			,'box-shadow:0 0 3px #333'
-			,'z-index:10000000'
+			,'box-shadow:0 0 3px #333'			
 		]
 		,msg: [
 		 	 'padding:0'
@@ -45,10 +124,29 @@
 			,'height:16px'
 			,'line-height:16px'
 			,'font-size:14px'
-			,'text-overflow:ellipsis; white-space:nowrap;overflow:hidden'
+			,'text-overflow:ellipsis'
+			,'white-space:nowrap'
+			,'overflow:hidden'
 			,'border-bottom:3px solid #999'
 			,'letter-spacing:2px'			
 		]
+	}
+	var html = {
+		tool: ''+
+			'<div style="'+ style.toolbreak.join(';')+';' +'">'+
+				'<span style="'+ style.toolspan.join(';')+';' +'">&#x663E;&#x793A;&#x7684;&#x7F29;&#x8FDB;:</span>'+
+				'<input type="text" style="'+ style.toolinput.join(';')+';' +'" id="'+time+'indent" value="20">'+
+			'</div>'+
+			'<div style="'+ style.toolbreak.join(';')+';' +'">'+
+				'<span style="'+ style.toolspan.join(';')+';' +'">&#x5408;&#x6CD5;&#x5355;&#x6807;&#x7B7E;:</span>'+
+				'<textarea id="'+time+'single_tag" style="'+ style.toolarea.join(';')+';' +'">!, !DOCTYPE, !--, meta, link, base, img, br, hr, input</textarea>'+
+			'</div>'+
+			'<div style="'+ style.toolbreak.join(';')+';' +'">'+
+				'<div id="'+time+'check_btn" style="'+ style.toolbtn.join(';')+';' +'">&#x68C0;&#x67E5;&#x6807;&#x7B7E;</div>'+
+			'</div>'
+	}
+	var id = function(id){
+		return document.getElementById(time+id)
 	}
 	var ajax = function (url, options){		
 		var  request = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP')
@@ -63,9 +161,18 @@
 			}
 		}
 	}
-	var handle = (function(){
+	var addEvent = function(node, type, func){
+		if( (typeof type).toUpperCase() == 'FUNCTION' ){
+			func = type
+			type = 'click'
+		}
+		node.addEventListener ? 
+			node.addEventListener(type, func, false) :
+			node.attachEvent('on' + type, func)
+	}
+	var handle = (function(conf){
 		var //每个时间片处理的字符数
-			 pieceLength = 500	
+			 pieceLength = 500
 			//每个时间片时间
 			,pieceTime = 5
 			//缩进的大小
@@ -182,7 +289,7 @@
 				for(i=0;i<len;i++){
 					sortChar(htmlArr[i])
 				}
-				return tagArr;
+				return tagArr
 			}
 			/*================================================
 			* 检查标签数组
@@ -288,7 +395,7 @@
 						return false
 					}
 				for(i=0; i<len; i++){
-					if(!/^[\ ]*$/.test(tagArr[i])){
+					if(!/^[\ |\r|\n|\t]*$/.test(tagArr[i])){
 						aLine = document.createElement('div')
 						aLine.appendChild( document.createTextNode(tagArr[i]) )
 						aLine.style.cssText += ';'+( !isError(i) ? style.line.join(';') : style.line.concat(style.error).join(';') )+';'
@@ -303,16 +410,30 @@
 
 			//=================================================
 			//start
-			,parse = function(input,output){
+			,parseParam = function(conf){
+				if( (typeof conf).toUpperCase() == 'OBJECT' ){
+					pieceLength = conf.pieceLength || pieceLength
+					//每个时间片时间
+					,pieceTime = conf.pieceTime || pieceTime
+					//缩进的大小
+					,indentPx = conf.indentPx || indentPx
+					//单标签
+					,singleTag = conf.singleTag || singleTag
+				}
+			}
+			,parse = function(input,output,conf){
 				var html = input
 					,out = output
 					,htmlArr = []
 					,tagArr = []
-					,htmlLength = html.length
-					,pieceNum = htmlLength/pieceLength + 1
 					,execArr = []
+					,htmlLength
+					,pieceNum					
 					,err
 					,i
+				parseParam(conf)
+				htmlLength = html.length
+				pieceNum = htmlLength/pieceLength + 1
 				html = html
 					.replace(/<script[^>]*?>(.|\n)*?<\/script>/gim,'<script>...</script>')
 					.replace(/<style[^>]*?>(.|\n)*?<\/style>/gim,'<style>...</style>')
@@ -321,6 +442,7 @@
 					execArr.push({
 						 func: function(piece){
 						 	htmlArr = htmlArr.concat(piece.split(''))
+						 	msg.innerHTML += '.'
 						}
 						,param:[ html.slice( i*pieceLength, (i+1)*pieceLength ) ]
 					})
@@ -334,23 +456,46 @@
 		return {
 			parse : parse
 		}
-	})()
+	})()	
 	var build = function(){		
+		aWindow = window.open('javascript:void(0)')
 		output = document.createElement('div')
 		msg = document.createElement('div')
 		msg.style.cssText += ';'+style.msg.join(';')+';'
 		output.style.cssText += ';'+style.out.join(';')+';'
-		output.appendChild(msg)
-		msg.innerHTML = 'CHECKING...'
-		document.body.appendChild(output)
-	}
-	var parse = function(){
+		aWindow.document.body.style.cssText += ';'+style.body.join(';')+';'		
+		msg.innerHTML = 'GETING SOURSE...'
+		output.appendChild(msg)		
+		aWindow.document.body.appendChild(output)
+	}	
+	var parse = function(conf){
 		ajax(window.location.href,{
 			success: function(html){
-				handle.parse(html,output)
+				msg.innerHTML = 'CHECKING...'
+				handle.parse(html,output,conf)
 			}
 		})
 	}
-	build()
-	parse()
-})(window,document)
+	var run = function(conf){
+		build();
+		parse(conf);
+	}
+	var getConf = function(){
+		return {
+			 indentPx: indentPxDOM.value
+			,singleTag: singleTagDOM.value.replace(/[\n|\t|\r\ ]/g, '').split(',')
+		}
+	}	
+	var showTool = function(){
+		var tool = document.createElement('div')
+		tool.style.cssText += ';'+style.tool.join(';')+';'
+		tool.innerHTML = html.tool		
+		document.body.appendChild(tool)
+		indentPxDOM = id('indent')
+		singleTagDOM = id('single_tag')
+		addEvent(id('check_btn'), function(){
+			run(getConf())
+		})
+	}		
+	showTool()
+})(window,document)	
