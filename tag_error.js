@@ -3,7 +3,7 @@
 		,output
 		,msg
 		,indentPxDOM
-		,singleTagDOM
+		,singleTagDOM		
 	var time = [
 		 (new Date()).getTime().toString()
 		,Math.random().toString().replace('.','')
@@ -63,6 +63,7 @@
 		 	,'text-align:left'
 		 	,'border:none'
 		 	,'height:100px'
+		 	,'width:180px'
 		 	,'display:block'
 		]
 		,toolbtn: [
@@ -88,15 +89,12 @@
 		 	,'color:#fff'
 		 	,'font-family: arial, sans-serif'
 		 	,'background:#333'
+		 	,'word-break:break-all'
 		 	,'text-align:left'
 		 	,'display:block'
 		 	,'text-indent:0'
-			,'height:16px'
 			,'line-height:16px'
 			,'font-size:14px'
-			,'text-overflow:ellipsis'
-			,'white-space:nowrap'
-			,'overflow:hidden'
 			,'border-left:3px solid #999'
 			,'letter-spacing:2px'
 		]
@@ -139,7 +137,7 @@
 			'</div>'+
 			'<div style="'+ style.toolbreak.join(';')+';' +'">'+
 				'<span style="'+ style.toolspan.join(';')+';' +'">&#x5408;&#x6CD5;&#x5355;&#x6807;&#x7B7E;:</span>'+
-				'<textarea id="'+time+'single_tag" style="'+ style.toolarea.join(';')+';' +'">meta, link, base, img, br, hr, input</textarea>'+
+				'<textarea id="'+time+'single_tag" style="'+ style.toolarea.join(';')+';' +'">area, base, basefont, br, col, frame, hr, img, input, isindex, link, meta, param, embed</textarea>'+
 			'</div>'+
 			'<div style="'+ style.toolbreak.join(';')+';' +'">'+
 				'<div id="'+time+'check_btn" style="'+ style.toolbtn.join(';')+';' +'">&#x68C0;&#x67E5;&#x6807;&#x7B7E;</div>'+
@@ -180,13 +178,20 @@
 			//==================================
 			//单标签
 			,singleTag = [
-				 'meta'
-				,'link'
+				 'area'
 				,'base'
-				,'img'
+				,'basefont'
 				,'br'
+				,'col'
+				,'frame'
 				,'hr'
+				,'img'
 				,'input'
+				,'isindex'
+				,'link'
+				,'meta'
+				,'param'
+				,'embed'
 			]
 			/*=================================
 			* 执行队列。为了浏览器不会卡死
@@ -283,7 +288,7 @@
 					}
 					,len = htmlArr.length
 					,i
-				for(i=0;i<len;i++){
+				for(i=0;i<len;i++){					
 					sortChar(htmlArr[i])
 				}
 				return tagArr
@@ -315,13 +320,16 @@
 					}
 					,hasError = false
 					,errorLine = []
-				for(i; i<len; i++){
+				for(i; i<len; i++){					
 					isSingleTag = false
 					aTag = tagArr[i]
 					//如果开始标签
 					if( match = aTag.match(checkExp.startTag) ){
 						//如果单标签
-						for(j=0; j<singleTagLength; j++){
+						if(/\/\>$/i.test(aTag)){
+							isSingleTag = true;
+						}
+						for(j=0; j<singleTagLength; j++){							
 							if(match[1] == singleTag[j]){
 								isSingleTag = true;
 								break;
@@ -391,7 +399,7 @@
 						}
 						return false
 					}
-				for(i=0; i<len; i++){
+				for(i=0; i<len; i++){					
 					if(!/^[\ |\r|\n|\t]*$/.test(tagArr[i])){
 						aLine = document.createElement('div')
 						aLine.appendChild( document.createTextNode(tagArr[i]) )
@@ -421,7 +429,6 @@
 			,parse = function(input,output,conf){
 				var html = input
 					,out = output
-					,htmlArr = []
 					,tagArr = []
 					,execArr = []
 					,htmlLength
@@ -434,22 +441,10 @@
 				html = html
 					.replace(/<script[^>]*?>(.|\n|\r|\ )*?<\/script>/gim,'<script>...</script>')
 					.replace(/<style[^>]*?>(.|\n|\r|\ )*?<\/style>/gim,'<style>...</style>')
-					.replace(/<textarea[^>]*?>(.|\n|\r|\ )*?<\/textarea>/gim,'<textarea>...</textarea>')
-				
-				for(i=0;i<pieceNum;i=i+1){
-					execArr.push({
-						 func: function(piece){
-						 	htmlArr = htmlArr.concat(piece.split(''))
-						 	msg.innerHTML += '.'
-						}
-						,param:[ html.slice( i*pieceLength, (i+1)*pieceLength ) ]
-					})
-				}
-				execLine(execArr,function(){
-					tagArr = makeTagArr(htmlArr)
-					err = check(tagArr)
-					show(out,tagArr, err)
-				})
+					.replace(/<textarea[^>]*?>(.|\n|\r|\ )*?<\/textarea>/gim,'<textarea>...</textarea>')				
+				tagArr = makeTagArr(html)
+				err = check(tagArr)
+				show(out,tagArr, err)
 			}
 		return {
 			parse : parse
@@ -463,7 +458,7 @@
 		output.style.cssText += ';'+style.out.join(';')+';'
 		aWindow.document.body.style.cssText += ';'+style.body.join(';')+';'		
 		msg.innerHTML = 'GETING SOURSE...'
-		output.appendChild(msg)		
+		output.appendChild(msg)
 		aWindow.document.body.appendChild(output)
 	}	
 	var parse = function(conf){
