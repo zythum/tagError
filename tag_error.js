@@ -2,6 +2,7 @@
 	var  aWindow
 		,output
 		,msg
+		,tool
 		,indentPxDOM
 		,singleTagDOM		
 	var time = [
@@ -13,7 +14,7 @@
 		tool: [
 			 'padding:10px'
 		 	,'margin:0'
-		 	,'color:#fff'
+		 	,'color:#eee'
 			,'position:fixed'
 			,'right:0'
 			,'top:0'
@@ -29,14 +30,14 @@
 			,'margin:0'			
 			,'text-align:left'
 			,'line-height:14px'
-			,'color:#fff'
+			,'color:#eee'
 			,'clear:both'
 		]
 		,toolspan: [
 		 	 'padding:0'
 		 	,'margin:0'
 		 	,'font-size:14px'
-		 	,'color:#fff'
+		 	,'color:#eee'
 		 	,'line-height:16px'
 		 	,'display:block'
 		 	,'float:left'
@@ -45,7 +46,7 @@
 		,toolinput: [
 			 'padding:0'
 		 	,'margin:0 0 0 90px'
-		 	,'color:#fff'
+		 	,'color:#eee'
 		 	,'line-height:16px'
 		 	,'font-size:14px'
 		 	,'width:30px'
@@ -69,7 +70,7 @@
 		,toolbtn: [
 			 'padding:0'
 		 	,'margin:0 auto'
-		 	,'color:#fff'
+		 	,'color:#eee'
 		 	,'font-size:16px'
 		 	,'width:200px'
 		 	,'text-align:center'
@@ -83,50 +84,85 @@
 		 	,'background-image:-o-linear-gradient(top, #555 0%,#444 100%)'
 		 	,'background-image:linear-gradient(top, #555 0%,#444 100%)'
 		]
+		,toolclose: [
+			 'padding:0'
+			,'margin:0'
+			,'position:absolute'
+			,'top:0'
+			,'left:-28px'
+			,'width:30px'
+			,'background:#333'
+			,'text-align:center'
+			,'height:30px'
+			,'line-height:30px'
+			,'font-size:18px'
+			,'cursor:pointer'
+		]
 		,line: [
-		 	 'padding:0'
-		 	,'margin:0'
-		 	,'color:#fff'
-		 	,'font-family: arial, sans-serif'
-		 	,'background:#333'
+		 	,'color:#eee'
 		 	,'word-break:break-all'
-		 	,'text-align:left'
-		 	,'display:block'
-		 	,'text-indent:0'
-			,'line-height:16px'
-			,'font-size:14px'
+		 	,'min-height:18px'
+			,'line-height:18px'			
 			,'border-left:3px solid #999'
 			,'letter-spacing:2px'
+		]
+		,lineout: [
+			 'min-height:18px'
+			,'clear:both'
+			,'background:#333'
+		]
+		,lineoutodd: [
+			 'min-height:18px'
+			,'clear:both'
+			,'background:#383838'
+		]
+		,linenum: [
+			 'width:60px'
+			,'float:left'
+			,'height:18px'
+			,'line-height:18px'
+			,'color:#aaa'
+		]
+		,linecontent: [
+			 'margin-left:62px'
+			,'border-left:1px solid #666'
 		]
 		,error: [
 			'background:red'
 		]
 		,body: [
-			'background:#444'
+			 'margin:0'
+			,'padding:0'
+			,'background:#333'
+			,'font-family: arial, sans-serif'
+			,'font-size:14px'
 		]
 		,out: [			
 			 'background:#333'
 			,'overflow:auto'
 			,'border:10px solid #333'
-			,'box-shadow:0 0 3px #333'			
+			,'box-shadow:0 0 3px #333'
+			,'padding:30px 0 0 0'
 		]
 		,msg: [
-		 	 'padding:0'
+		 	 'padding:10px'
 		 	,'margin:0 0 10px 0'
+		 	,'height:40px'
+		 	,'position:fixed'
+		 	,'top:0'
+		 	,'left:0'
+		 	,'right:0'
+		 	,'box-shadow:0 0 10px #000'
 		 	,'color:red'
-		 	,'font-family: arial, sans-serif'
-		 	,'background:#333'
-		 	,'text-align:left'
-		 	,'display:block'
-		 	,'text-indent:0'
+		 	,'background-image:-webkit-linear-gradient(top, #444 0%,#333 100%)'
+		 	,'background-image:-moz-linear-gradient(top, #444 0%,#333 100%)'
+		 	,'background-image:-o-linear-gradient(top, #444 0%,#333 100%)'
+		 	,'background-image:linear-gradient(top, #444 0%,#333 100%)'
 			,'height:16px'
 			,'line-height:16px'
-			,'font-size:14px'
-			,'text-overflow:ellipsis'
-			,'white-space:nowrap'
-			,'overflow:hidden'
-			,'border-bottom:3px solid #999'
-			,'letter-spacing:2px'			
+			,'border-bottom:1px solid #999'
+			,'letter-spacing:2px'
+			,'cursor:pointer'
 		]
 	}
 	var html = {
@@ -141,10 +177,12 @@
 			'</div>'+
 			'<div style="'+ style.toolbreak.join(';')+';' +'">'+
 				'<div id="'+time+'check_btn" style="'+ style.toolbtn.join(';')+';' +'">&#x68C0;&#x67E5;&#x6807;&#x7B7E;</div>'+
-			'</div>'
+			'</div>'+
+			'<div id="'+time+'check_close" style="'+ style.toolclose.join(';')+';' +'">x</div>'
 	}
-	var id = function(id){
-		return document.getElementById(time+id)
+	var id = function(id,parent){
+		parent = parent || document
+		return parent.getElementById(time+id)
 	}
 	var ajax = function (url, options){		
 		var  request = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP')
@@ -370,7 +408,7 @@
 				}
 				if(i==len && checkStorage.length != 0){
 					hasError = true
-					errorLine = [checkStorage[checkStorage.length-1].line]
+					errorLine = [ checkStorage[checkStorage.length-1].line ]
 				}
 				return 	{
 					 hasError: hasError
@@ -381,8 +419,13 @@
 			}
 			,show = function(out, tagArr, err){
 				var  i
+					,j
+					,errorLineNum = []
 					,len = tagArr.length
 					,aLine
+					,aLineout
+					,aLinenum
+					,aLinecontent
 					,className
 					,isError = function(line){
 						var  errorLine
@@ -399,18 +442,34 @@
 						}
 						return false
 					}
-				for(i=0; i<len; i++){					
+				for(i=0,j=1; i<len; i++){					
 					if(!/^[\ |\r|\n|\t]*$/.test(tagArr[i])){
 						aLine = document.createElement('div')
+						aLineout = document.createElement('div')
+						aLinenum = document.createElement('div')
+						aLinecontent = document.createElement('div')
 						aLine.appendChild( document.createTextNode(tagArr[i]) )
 						aLine.style.cssText += ';'+( !isError(i) ? style.line.join(';') : style.line.concat(style.error).join(';') )+';'
 						if(err && err.indentArr && err.indentArr[i]){
 							aLine.style.marginLeft = err.indentArr[i]*indentPx + 'px'
 						}
-						out.appendChild(aLine);
+						aLinenum.style.cssText += ';'+style.linenum.join(';')+';'
+						aLineout.style.cssText += ';'+( j%2==0 ? style.lineout.join(';') : style.lineoutodd.join(';') )+';'
+						aLinecontent.style.cssText += ';'+style.linecontent.join(';')+';'
+						aLinenum.innerHTML = j
+						aLineout.id = j
+						aLineout.appendChild(aLinenum)
+						aLineout.appendChild(aLinecontent)
+						aLinecontent.appendChild(aLine)						
+						out.appendChild(aLineout)
+						if( isError(i) ){
+							errorLineNum.push(j)
+						}
+						j++
 					}
 				}
-				msg.innerHTML = err ? (err.hasError ? 'HAS TAG ARROR' : 'NO TAG ERROR') : ''
+				msg.errorLine = errorLineNum[0]
+				msg.innerHTML = err ? (err.hasError ? 'HAS TAG ARROR AT LINE: '+errorLineNum.join(', ') : 'NO TAG ERROR') : ''
 			}
 
 			//=================================================
@@ -457,9 +516,16 @@
 		msg.style.cssText += ';'+style.msg.join(';')+';'
 		output.style.cssText += ';'+style.out.join(';')+';'
 		aWindow.document.body.style.cssText += ';'+style.body.join(';')+';'		
-		msg.innerHTML = 'GETING SOURSE...'
+		msg.innerHTML = 'GETING SOURSE...'		
 		output.appendChild(msg)
 		aWindow.document.body.appendChild(output)
+		addEvent(msg,function(){
+			if(msg.errorLine){
+				var errorLine = aWindow.document.getElementById(msg.errorLine)
+				var top = errorLine ? errorLine.offsetTop : 0
+				aWindow.scroll(0, top-100)
+			}
+		})
 	}	
 	var parse = function(conf){
 		ajax(window.location.href,{
@@ -468,27 +534,32 @@
 				handle.parse(html,output,conf)
 			}
 		})
-	}
-	var run = function(conf){
-		build();
-		parse(conf);
-	}
+	}	
 	var getConf = function(){
 		return {
 			 indentPx: indentPxDOM.value
 			,singleTag: singleTagDOM.value.replace(/[\n|\t|\r\ ]/g, '').split(',')
 		}
+	}
+	var run = function(){
+		build();
+		parse(getConf);
 	}	
+	var hideTool = function(){
+		document.body.removeChild(tool)
+		window.tagErrorToolBarByZythumIsShow = undefined
+	}			
 	var showTool = function(){
-		var tool = document.createElement('div')
+		tool = document.createElement('div')		
 		tool.style.cssText += ';'+style.tool.join(';')+';'
-		tool.innerHTML = html.tool		
+		tool.innerHTML = html.tool
 		document.body.appendChild(tool)
 		indentPxDOM = id('indent')
 		singleTagDOM = id('single_tag')
-		addEvent(id('check_btn'), function(){
-			run(getConf())
-		})
-	}		
-	showTool()
-})(window,document)	
+		toolcloseDOM = id('check_close')
+		addEvent(id('check_btn'), run)
+		addEvent(id('check_close'), hideTool)
+		window.tagErrorToolBarByZythumIsShow = true
+	}	
+	window.tagErrorToolBarByZythumIsShow != true && showTool()
+})(window,document)
