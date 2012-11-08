@@ -4,7 +4,12 @@
 		,msg
 		,tool
 		,indentPxDOM
-		,singleTagDOM		
+		,singleTagDOM
+		,toolurlDOM
+		,toolurlBlockDOM
+		,toolcodeDOM
+		,toolcodeBlockDOM
+		,urlOrCode = 'url'
 	var time = [
 		 (new Date()).getTime().toString()
 		,Math.random().toString().replace('.','')
@@ -24,6 +29,7 @@
 			,'box-shadow:0 0 3px #333'
 			,'text-align:left'
 			,'z-index:10000000'
+			,'border-radius:3px'
 		]
 		,toolbreak: [
 			 'padding:10px 0 0 0'
@@ -49,7 +55,7 @@
 		 	,'color:#eee'
 		 	,'line-height:16px'
 		 	,'font-size:14px'
-		 	,'width:30px'
+		 	,'width:180px'
 		 	,'background:#333'
 		 	,'border:none'
 		 	,'text-align:left'
@@ -66,6 +72,7 @@
 		 	,'height:100px'
 		 	,'width:180px'
 		 	,'display:block'
+		 	,'border-radius:3px'
 		]
 		,toolbtn: [
 			 'padding:0'
@@ -83,6 +90,25 @@
 		 	,'background-image:-moz-linear-gradient(top, #555 0%,#444 100%)'
 		 	,'background-image:-o-linear-gradient(top, #555 0%,#444 100%)'
 		 	,'background-image:linear-gradient(top, #555 0%,#444 100%)'
+		 	,'border-radius:3px'
+		]
+		,toollittlebtn: [
+			 'padding:0'
+		 	,'margin:0 0 0 90px'
+		 	,'color:#eee'
+		 	,'font-size:14px'
+		 	,'width:180px'
+		 	,'text-align:center'
+		 	,'width:150px'
+		 	,'height:20px'
+		 	,'line-height:20px'
+		 	,'box-shadow:0 0 2px #000'
+		 	,'cursor:pointer'
+		 	,'background-image:-webkit-linear-gradient(top, #555 0%,#444 100%)'
+		 	,'background-image:-moz-linear-gradient(top, #555 0%,#444 100%)'
+		 	,'background-image:-o-linear-gradient(top, #555 0%,#444 100%)'
+		 	,'background-image:linear-gradient(top, #555 0%,#444 100%)'
+		 	,'border-radius:3px'
 		]
 		,toolclose: [
 			 'padding:0'
@@ -170,6 +196,18 @@
 			'<div style="'+ style.toolbreak.join(';')+';' +'">'+
 				'<span style="'+ style.toolspan.join(';')+';' +'">&#x663E;&#x793A;&#x7684;&#x7F29;&#x8FDB;:</span>'+
 				'<input type="text" style="'+ style.toolinput.join(';')+';' +'" id="'+time+'indent" value="20">'+
+			'</div>'+
+			'<div id="'+time+'url_block" style="'+ style.toolbreak.join(';')+';' +'">'+
+				'<span style="'+ style.toolspan.join(';')+';' +'">&#x68C0;&#x67E5;&#x7684;&#x5730;&#x5740;:</span>'+
+				'<input type="text" style="'+ style.toolinput.join(';')+';' +'" id="'+time+'url" value="'+window.location.href+'">'+
+				'<div style="'+ style.toolinput.join(';')+';' +'font-size:12px;paddng-top:5px;color:#666" >! &#x5730;&#x5740;&#x8BF7;&#x4E0D;&#x8981;&#x8DE8;&#x533A;</div>'+
+			'</div>'+
+			'<div id="'+time+'code_block" style="'+ style.toolbreak.join(';')+';' +'display:none">'+
+				'<span style="'+ style.toolspan.join(';')+';' +'">&#x68C0;&#x67E5;&#x7684;&#x4EE3;&#x7801;:</span>'+
+				'<textarea id="'+time+'code" style="'+ style.toolarea.join(';')+';' +'"></textarea>'+
+			'</div>'+
+			'<div style="'+ style.toolbreak.join(';')+';' +'">'+
+				'<div id="'+time+'check_toggle" style="'+ style.toollittlebtn.join(';')+';' +'">&#x5207;&#x6362;&#x68C0;&#x67E5;&#x5F62;&#x5F0F;</div>'+
 			'</div>'+
 			'<div style="'+ style.toolbreak.join(';')+';' +'">'+
 				'<span style="'+ style.toolspan.join(';')+';' +'">&#x5408;&#x6CD5;&#x5355;&#x6807;&#x7B7E;:</span>'+
@@ -515,7 +553,7 @@
 		msg = document.createElement('div')
 		msg.style.cssText += ';'+style.msg.join(';')+';'
 		output.style.cssText += ';'+style.out.join(';')+';'
-		aWindow.document.body.style.cssText += ';'+style.body.join(';')+';'		
+		aWindow.document.body.style.cssText += ';'+style.body.join(';')+';'	
 		msg.innerHTML = 'GETING SOURSE...'		
 		output.appendChild(msg)
 		aWindow.document.body.appendChild(output)
@@ -528,27 +566,43 @@
 		})
 	}	
 	var parse = function(conf){
-		ajax(window.location.href,{
-			success: function(html){
-				msg.innerHTML = 'CHECKING...'
-				handle.parse(html,output,conf)
-			}
-		})
+		if(urlOrCode == 'url'){
+			ajax(conf.url,{
+				success: function(html){
+					msg.innerHTML = 'CHECKING...'
+					handle.parse(html,output,conf)
+				}
+			})
+		}else if(urlOrCode == 'code'){
+			handle.parse(toolcodeDOM.value,output,conf)
+		}
 	}	
 	var getConf = function(){
 		return {
-			 indentPx: indentPxDOM.value
+			 url : toolurlDOM.value
+			,indentPx: indentPxDOM.value
 			,singleTag: singleTagDOM.value.replace(/[\n|\t|\r\ ]/g, '').split(',')
 		}
 	}
 	var run = function(){
 		build();
-		parse(getConf);
-	}	
+		parse(getConf());
+	}
+	var toggle = function(){
+		if(urlOrCode == 'url'){
+			toolurlBlockDOM.style.display = 'none'
+			toolcodeBlockDOM.style.display = ''
+			urlOrCode = 'code'
+		}else if(urlOrCode == 'code'){
+			toolurlBlockDOM.style.display = ''
+			toolcodeBlockDOM.style.display = 'none'
+			urlOrCode = 'url'
+		}
+	}
 	var hideTool = function(){
 		document.body.removeChild(tool)
 		window.tagErrorToolBarByZythumIsShow = undefined
-	}			
+	}
 	var showTool = function(){
 		tool = document.createElement('div')		
 		tool.style.cssText += ';'+style.tool.join(';')+';'
@@ -557,9 +611,14 @@
 		indentPxDOM = id('indent')
 		singleTagDOM = id('single_tag')
 		toolcloseDOM = id('check_close')
+		toolurlDOM = id('url')
+		toolcodeDOM = id('code')
+		toolurlBlockDOM = id('url_block')
+		toolcodeBlockDOM = id('code_block')
 		addEvent(id('check_btn'), run)
 		addEvent(id('check_close'), hideTool)
+		addEvent(id('check_toggle'), toggle)
 		window.tagErrorToolBarByZythumIsShow = true
-	}	
+	}
 	window.tagErrorToolBarByZythumIsShow != true && showTool()
 })(window,document)
