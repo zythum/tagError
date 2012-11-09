@@ -366,8 +366,11 @@
 					}
 					,len = htmlArr.length
 					,i
-				for(i=0;i<len;i++){					
-					sortChar(htmlArr[i])
+					,aChar
+				for(i=0;i<len;i++){
+					aChar = htmlArr[i]
+					aChar = (aChar == undefined ? htmlArr.substring(i, i+1) : aChar)
+					sortChar(aChar)
 				}
 				return tagArr
 			}
