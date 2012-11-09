@@ -551,14 +551,16 @@
 	})()	
 	var build = function(){		
 		aWindow = window.open()
+		//修改document 不然ie傻x
+		document = aWindow.document
 		output = document.createElement('div')
 		msg = document.createElement('div')
 		msg.style.cssText += ';'+style.msg.join(';')+';'
 		output.style.cssText += ';'+style.out.join(';')+';'
-		aWindow.document.body.style.cssText += ';'+style.body.join(';')+';'	
+		document.body.style.cssText += ';'+style.body.join(';')+';'	
 		msg.innerHTML = 'GETING SOURSE...'		
 		output.appendChild(msg)
-		aWindow.document.body.appendChild(output)
+		document.body.appendChild(output)
 		addEvent(msg,function(){
 			if(msg.errorLine){
 				var errorLine = aWindow.document.getElementById(msg.errorLine)
