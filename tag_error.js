@@ -223,7 +223,7 @@
 		return parent.getElementById(time+id)
 	}
 	var ajax = function (url, options){		
-		var  request = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP')
+		var  request = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP')
 			,type = options.type || 'GET'
 		options = options || {}
 		request.open(type, url, true)
@@ -604,7 +604,7 @@
 		}
 	}
 	var hideTool = function(){
-		document.body.removeChild(tool)
+		window.document.body.removeChild(tool)
 		window.tagErrorToolBarByZythumIsShow = undefined
 	}
 	var showTool = function(){
