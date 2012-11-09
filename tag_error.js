@@ -12,7 +12,7 @@
 		,urlOrCode = 'url'
 	var time = [
 		 (new Date()).getTime().toString()
-		,Math.random().toString().replace('.','')
+		,Math.random().toString().replace('.', '')
 		,''
 	].join('_')
 	var style = {
@@ -229,9 +229,11 @@
 		request.open(type, url, true)
 		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
 		request.send()
-		request.onreadystatechange = function (){
-			if (request.readyState === 4 && request.status === 200 && options.success){
+		request.onreadystatechange = function(){
+			if(request.readyState === 4 && request.status === 200 && options.success){
 				options.success(request.responseText)
+			}else if(options.fail){
+				options.fail(request.responseText)
 			}
 		}
 	}
@@ -548,7 +550,7 @@
 		}
 	})()	
 	var build = function(){		
-		aWindow = window.open('javascript:void(0)')
+		aWindow = window.open()
 		output = document.createElement('div')
 		msg = document.createElement('div')
 		msg.style.cssText += ';'+style.msg.join(';')+';'
@@ -568,9 +570,12 @@
 	var parse = function(conf){
 		if(urlOrCode == 'url'){
 			ajax(conf.url,{
-				success: function(html){
+				 success: function(html){
 					msg.innerHTML = 'CHECKING...'
 					handle.parse(html,output,conf)
+				}
+				,fail: function(){
+					msg.innerHTML = 'GETING SOURSE ERROR'
 				}
 			})
 		}else if(urlOrCode == 'code'){
