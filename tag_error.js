@@ -19,8 +19,9 @@
 		tool: [
 			 'padding:10px'
 		 	,'margin:0'
-		 	,'color:#eee'
+		 	,'color:#eee'		 	
 			,'position:fixed'
+			,'_position:absolute'
 			,'right:0'
 			,'top:0'
 			,'width:300px'

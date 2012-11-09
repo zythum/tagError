@@ -129,11 +129,16 @@ pre code {
 <body>
 <h2>标签闭合检测bookmark脚本</h2>
 
+<hr />
+
 <p>把这个链接添加到收藏栏。点击即可检查改页面的标签闭合性。</p>
 <p>sae链接</p>
 <p><a href="javascript:void((function(){var a=document.createElement('script');a.setAttribute('type','text/javascript');a.setAttribute('src','http://weibotuchuang.sinaapp.com/tagerror/tag_error.js');document.body.appendChild(a)})())">检查标签闭合</a></p>
 <p>github链接</p>
 <p><a href="javascript:void((function(){var a=document.createElement('script');a.setAttribute('type','text/javascript');a.setAttribute('src','https://raw.github.com/zythum/tagError/master/tag_error.js');document.body.appendChild(a)})())">检查标签闭合</a></p>
+
+<hr />
+
 <p>更新：</p>
 
 <p>2012-11-8</p>
@@ -151,7 +156,40 @@ pre code {
 
 <ul>
 <li>加入ie家族支持。</li>
-
 </ul>
+
+<hr />
+
+<h4>使用方式</h4>
+
+<ol>
+<li>访问 <a href="http://weibotuchuang.sinaapp.com">http://weibotuchuang.sinaapp.com</a></li>
+<li>使用各种方式将bookmark加入收藏夹/书签(就是页面上的“检查标签闭合”链接，有sea版和github版，大家各取所需)。加入收藏夹/书签的方式和把一个链接地址放入收藏夹是一样一样的:
+
+<ul>
+<li>ie下: 鼠标右键点击链接 > 点击添加到收藏夹。</li>
+<li>opera下: 鼠标右键点击链接 > 点击添加到书签。</li>
+<li>firefox下: 切换出书签工具栏（在地址栏附近的位置点击右键，西安泽书签地址栏）> 拖拽链接到书签栏。</li>
+<li>chrome下: 切换出书签工具栏（快捷键cmd+shift+b/ctrl+shift+b）> 拖拽链接到书签栏。</li>
+<li>safari下: 切换出书签工具栏（快捷键cmd+shift+b/ctrl+shift+b）> 拖拽链接到书签栏。</li>
+</ul>
+</li>
+<li>在需要检查的页面上。点击已经加入收藏夹/书签，会在页面右上出现工具栏，可以填写一些自定义选项。一般情况下只要直接点击“检查标签”即可。如果需要检查手头的html脚本而非远程页面。可以点击“切换检查形式”，输入html脚本</li>
+<li>检查结果回在新页打开。回来顶部得到接口是否有错误。有错误会显示错误行号。点击错误行号可以找到错误位置。</li>
+</ol>
+
+
+<h4>PS一些注意事项</h4>
+
+<ul>
+<li>检查的html不一定是目前打开检查工具的页面。检查工具的工作其实是带着head头再次去请求一次该页面。所以可能会有些出入。但是大体不会有问题。</li>
+<li>工具上有一个“检查的地址”的项，可以修改。但是必须和打开这个检查工具的页面同域。不然无法获取源码。（ajax无法跨域，该工具并没有起后台程序）</li>
+<li>在检查微博页面是建议在url中加入js=1参数之后检查。检查工具会忽略掉javascript中的html脚本。</li>
+<li>遇到问题请联系朱一 zythum02@gmail.com / zhuyi@staff.sina.com.cn</li>
+</ul>
+<br/>
+<br/>
+<br/>
+<p style="text-align:center">-----围脖主站RIA-----</p>
 </body>
 </html>
