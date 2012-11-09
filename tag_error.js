@@ -397,7 +397,7 @@
 					//}
 					]
 					,checkExp = {
-						 startTag: /^<([-A-Za-z0-9_]+)((?:\s+[\w-]+(?:[\s|]*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>/
+						 startTag: /^<([-A-Za-z0-9_]+)((?:\s+[\w\-\:\_]+(?:[\s|]*=\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>/
 						,endTag: /^<\/([-A-Za-z0-9_]+)[^>]*>/
 					}
 					,hasError = false
@@ -544,7 +544,8 @@
 				html = html
 					.replace(/<script[^>]*?>(.|\n|\r|\ )*?<\/script>/gim,'<script>...</script>')
 					.replace(/<style[^>]*?>(.|\n|\r|\ )*?<\/style>/gim,'<style>...</style>')
-					.replace(/<textarea[^>]*?>(.|\n|\r|\ )*?<\/textarea>/gim,'<textarea>...</textarea>')				
+					.replace(/<textarea[^>]*?>(.|\n|\r|\ )*?<\/textarea>/gim,'<textarea>...</textarea>')
+					.replace(/<!--[\w\W\r\n]*?-->/gim,'<!--...-->')
 				tagArr = makeTagArr(html)
 				err = check(tagArr)
 				show(out,tagArr, err)
