@@ -574,9 +574,6 @@
 					msg.innerHTML = 'CHECKING...'
 					handle.parse(html,output,conf)
 				}
-				,fail: function(){
-					msg.innerHTML = 'GETING SOURSE ERROR'
-				}
 			})
 		}else if(urlOrCode == 'code'){
 			handle.parse(toolcodeDOM.value,output,conf)
