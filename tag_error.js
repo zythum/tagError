@@ -389,6 +389,7 @@
 					,singleTagLength = singleTag.length
 					,isSingleTag
 					,indentArr = []
+					,typeArr = []
 					,checkStorage = [
 					//{
 					// tagName:
@@ -407,6 +408,7 @@
 					aTag = tagArr[i]
 					//如果开始标签
 					if( match = aTag.match(checkExp.startTag) ){
+						typeArr[i] = 'tag'
 						//如果单标签
 						if(/\/\>$/i.test(aTag)){
 							isSingleTag = true;
@@ -421,7 +423,7 @@
 							indentArr.push(checkStorage.length)
 							continue
 						}
-						//不是但标签
+						//不是单标签
 						indentArr.push(checkStorage.length)
 						checkStorage.push({
 							 tagName: match[1]
@@ -431,7 +433,8 @@
 						continue
 					}
 					//如果结束标签
-					if( match = aTag.match(checkExp.endTag) ){				
+					if( match = aTag.match(checkExp.endTag) ){
+						typeArr[i] = 'tagend'			
 						prevTag = checkStorage[checkStorage.length-1]
 						if(!prevTag){
 							hasError = true
@@ -449,6 +452,7 @@
 					}
 					//如果是文字			
 					indentArr.push(checkStorage.length)
+					typeArr[i] = 'text'
 				}
 				if(i==len && checkStorage.length != 0){
 					hasError = true
@@ -459,6 +463,7 @@
 					,errorLine: errorLine
 					,errorContent: tagArr[errorLine]
 					,indentArr: indentArr
+					,typeArr : typeArr
 				}
 			}
 			,show = function(out, tagArr, err){
@@ -471,6 +476,7 @@
 					,aLinenum
 					,aLinecontent
 					,className
+					,type
 					,isError = function(line){
 						var  errorLine
 							,errorLineLength
@@ -494,6 +500,8 @@
 						aLinecontent = document.createElement('div')
 						aLine.appendChild( document.createTextNode(tagArr[i]) )
 						aLine.style.cssText += ';'+( !isError(i) ? style.line.join(';') : style.line.concat(style.error).join(';') )+';'
+						type = err.typeArr[i]
+						aLine.style.cssText += ';border-left:3px solid '+ (type=='tag'?'blue':type=='tagend'?'blue':type=='text'?'green':'#999') +';'
 						if(err && err.indentArr && err.indentArr[i]){
 							aLine.style.marginLeft = err.indentArr[i]*indentPx + 'px'
 						}
