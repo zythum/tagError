@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Tagerror : 查看标签是否闭合" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Tagerror</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/zythum/tagError">View on GitHub</a>
+
+          <h1 id="project_title">Tagerror</h1>
+          <h2 id="project_tagline">查看标签是否闭合</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/zythum/tagError/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/zythum/tagError/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>标签闭合检测bookmark脚本</h2>
+
+<hr><h4>更新：</h4>
+
+<p>2012-11-8</p>
+
+<ul>
+<li>效率上做了大的调整。现在效率应该是可以接受了</li>
+<li>对单标签做了调整。目前如果是/&gt;结尾的。会认为是单标签。如果不是。回来但标签的白名单中找，找不到会认为是对标签处理</li>
+<li>视觉调整 加入行号，加入点击错误提示定位到错误位置，加入单双行背景差异</li>
+<li>视觉调整 加入bookmark右上角工具关闭按钮</li>
+<li>添加 检查本地代码项</li>
+<li>视觉调整 加个圆角，稍微好看一下</li>
+</ul><p>2012-11-9</p>
+
+<ul>
+<li>加入ie家族支持</li>
+</ul><hr><h4>使用方式</h4>
+
+<ol>
+<li>访问 <a href="http://weibotuchuang.sinaapp.com">http://weibotuchuang.sinaapp.com</a>
+</li>
+<li>使用各种方式将bookmark加入收藏夹/书签(就是页面上的“检查标签闭合”链接，有sea版和github版，大家各取所需)。加入收藏夹/书签的方式和把一个链接地址放入收藏夹是一样一样的:
+
+<ul>
+<li>ie下: 鼠标右键点击链接 &gt; 点击添加到收藏夹。</li>
+<li>opera下: 鼠标右键点击链接 &gt; 点击添加到书签。</li>
+<li>firefox下: 切换出书签工具栏（在地址栏附近的位置点击右键，西安泽书签地址栏）&gt; 拖拽链接到书签栏。</li>
+<li>chrome下: 切换出书签工具栏（快捷键cmd+shift+b/ctrl+shift+b）&gt; 拖拽链接到书签栏。</li>
+<li>safari下: 切换出书签工具栏（快捷键cmd+shift+b/ctrl+shift+b）&gt; 拖拽链接到书签栏。</li>
+</ul>
+</li>
+<li>在需要检查的页面上。点击已经加入收藏夹/书签，会在页面右上出现工具栏，可以填写一些自定义选项。一般情况下只要直接点击“检查标签”即可。如果需要检查手头的html脚本而非远程页面。可以点击“切换检查形式”，输入html脚本</li>
+<li>检查结果回在新页打开。回来顶部得到接口是否有错误。有错误会显示错误行号。点击错误行号可以找到错误位置。</li>
+</ol><h4>PS一些注意事项</h4>
+
+<ul>
+<li>检查的html不一定是目前打开检查工具的页面。检查工具的工作其实是带着head头再次去请求一次该页面。所以可能会有些出入。但是大体不会有问题。</li>
+<li>工具上有一个“检查的地址”的项，可以修改。但是必须和打开这个检查工具的页面同域。不然无法获取源码。（ajax无法跨域，该工具并没有起后台程序）</li>
+<li>在检查微博页面是建议在url中加入js=1参数之后检查。检查工具会忽略掉javascript中的html脚本。</li>
+<li>遇到问题请联系朱一 <a href="mailto:zythum02@gmail.com">zythum02@gmail.com</a> / <a href="mailto:zhuyi@staff.sina.com.cn">zhuyi@staff.sina.com.cn</a>
+</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Tagerror maintained by <a href="https://github.com/zythum">zythum</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
